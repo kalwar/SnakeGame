@@ -9,6 +9,10 @@ import {
   DIRECTIONS
 } from "./constants";
 
+/**
+* A React component that renders a snake game on a canvas element.
+* @returns {JSX.Element} The JSX element for the game.
+*/
 const App = () => {
   const canvasRef = useRef();
   const [snake, setSnake] = useState(SNAKE_START);
@@ -17,19 +21,39 @@ const App = () => {
   const [speed, setSpeed] = useState(null);
   const [gameOver, setGameOver] = useState(false);
 
+  // Run the game loop at a fixed interval based on the speed
   useInterval(() => gameLoop(), speed);
 
+  /**
+   * Ends the game by setting the speed to null and the game over flag to true.
+  */
   const endGame = () => {
     setSpeed(null);
     setGameOver(true);
   };
 
+  /**
+    * Changes the direction of the snake based on the key code of the arrow keys.
+    * @param {Object} event - The keydown event object.
+    * @param {number} event.keyCode - The key code of the pressed key.
+  */
   const moveSnake = ({ keyCode }) =>
     keyCode >= 37 && keyCode <= 40 && setDir(DIRECTIONS[keyCode]);
 
+  /**
+    * Creates a new apple at a random position on the grid.
+    * @returns {Array<number>} The coordinates of the new apple.
+  */
   const createApple = () =>
     apple.map((_a, i) => Math.floor(Math.random() * (CANVAS_SIZE[i] / SCALE)));
 
+
+  /**
+    * Checks if a piece (either the snake head or an apple) collides with the walls or the snake body.
+    * @param {Array<number>} piece - The coordinates of the piece to check.
+    * @param {Array<Array<number>>} [snk=snake] - The coordinates of the snake body segments.
+    * @returns {boolean} True if there is a collision, false otherwise.
+  */
   const checkCollision = (piece, snk = snake) => {
     if (
       piece[0] * SCALE >= CANVAS_SIZE[0] ||
@@ -45,6 +69,11 @@ const App = () => {
     return false;
   };
 
+  /**
+    * Checks if the snake head collides with the apple, and creates a new apple if so.
+    * @param {Array<Array<number>>} newSnake - The coordinates of the new snake body segments.
+    * @returns {boolean} True if the snake ate the apple, false otherwise.
+  */
   const checkAppleCollision = newSnake => {
     if (newSnake[0][0] === apple[0] && newSnake[0][1] === apple[1]) {
       let newApple = createApple();
@@ -57,6 +86,9 @@ const App = () => {
     return false;
   };
 
+  /**
+    * Updates the game state by moving the snake, checking for collisions, and eating the apple.
+  */
   const gameLoop = () => {
     const snakeCopy = JSON.parse(JSON.stringify(snake));
     const newSnakeHead = [snakeCopy[0][0] + dir[0], snakeCopy[0][1] + dir[1]];
@@ -66,6 +98,9 @@ const App = () => {
     setSnake(snakeCopy);
   };
 
+  /**
+    * Starts the game by resetting the state to the initial values.
+  */
   const startGame = () => {
     setSnake(SNAKE_START);
     setApple(APPLE_START);
@@ -74,6 +109,7 @@ const App = () => {
     setGameOver(false);
   };
 
+  // Draw the snake and the apple on the canvas using the useEffect hook
   useEffect(() => {
     const context = canvasRef.current.getContext("2d");
     context.setTransform(SCALE, 0, 0, SCALE, 0, 0);
