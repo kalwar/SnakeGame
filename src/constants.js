@@ -14,7 +14,7 @@ const APPLE_START = [8, 3];
 const SCALE = 40;
 
 /* SPEED is a number that represents the speed of the snake's movement. The speed is 100 milliseconds, which means that the snake moves one square every 0.1 seconds. */
-const SPEED = 100;
+const SPEED = 500;
 
 /* DIRECTIONS is an object that maps the key codes of the arrow keys to the corresponding direction vectors. The direction vector is an array that contains the horizontal and vertical components of the movement. For example, the up arrow key has the code 38 and the direction vector [0, -1], which means that pressing the up arrow key will move the snake one square up. */
 
